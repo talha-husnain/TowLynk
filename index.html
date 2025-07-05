@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TowLynk Firestore Schema</title>
   <style>
+    /* Existing styles remain unchanged */
     .table-schema {
       background: linear-gradient(145deg, #fff9e6, #fef3c7);
       border-radius: 15px;
@@ -393,6 +394,131 @@
         transform: translateX(50%);
       }
     }
+
+    /* New styles for the visual schema */
+    .visual-schema {
+      background: linear-gradient(145deg, #fff9e6, #fef3c7);
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 30px;
+      position: relative;
+    }
+
+    .visual-schema h3 {
+      color: #92400e;
+      margin-top: 0;
+      font-size: 1.5em;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .schema-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 50px;
+      position: relative;
+    }
+
+    .table-box {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: 2px solid #f59e0b;
+      position: relative;
+    }
+
+    .table-box h4 {
+      color: #92400e;
+      margin: 0 0 10px 0;
+      font-size: 1.2em;
+      text-align: center;
+    }
+
+    .field-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .field-list li {
+      padding: 5px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    .field-list li.primary-key {
+      font-weight: bold;
+      color: #dc2626;
+    }
+
+    /* Lines connecting tables */
+    .connection-line {
+      position: absolute;
+      border-top: 2px solid #059669;
+      height: 0;
+    }
+
+    /* Specific lines for each relationship */
+    .line-orders-users {
+      top: 20%;
+      left: 20%;
+      width: 30%;
+      transform: rotate(-10deg);
+    }
+
+    .line-order_items-orders {
+      top: 40%;
+      left: 10%;
+      width: 20%;
+      transform: rotate(15deg);
+    }
+
+    .line-order_items-products {
+      top: 60%;
+      left: 30%;
+      width: 25%;
+      transform: rotate(-20deg);
+    }
+
+    .line-products-merchants {
+      top: 80%;
+      left: 40%;
+      width: 20%;
+      transform: rotate(10deg);
+    }
+
+    .line-merchants-users {
+      top: 90%;
+      left: 50%;
+      width: 15%;
+      transform: rotate(-15deg);
+    }
+
+    .line-merchants-countries {
+      top: 95%;
+      left: 60%;
+      width: 10%;
+      transform: rotate(5deg);
+    }
+
+    .line-users-countries {
+      top: 85%;
+      left: 70%;
+      width: 15%;
+      transform: rotate(-5deg);
+    }
+
+    @media (max-width: 768px) {
+      .schema-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .connection-line {
+        display: none;
+        /* Hide lines on small screens for simplicity */
+      }
+    }
   </style>
 </head>
 
@@ -404,6 +530,195 @@
     </div>
 
     <div class="schema-diagram">
+      <div class="collection">
+        <div class="collection-header">
+          <span class="collection-icon">👥</span>
+          /users/{userId}
+        </div>
+
+        <div class="field-group">
+          <h4>Core Fields</h4>
+          <div class="field required">uid: string</div>
+          <div class="field required">email: string</div>
+          <div class="field required">phoneNumber: string</div>
+          <div class="field required">role: "owner" | "provider"</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Profile</h4>
+          <div class="field">firstName: string</div>
+          <div class="field">lastName: string</div>
+          <div class="field">profileImageUrl: string</div>
+          <div class="field">address: object</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Provider Settings</h4>
+          <div class="field">isActive: boolean</div>
+          <div class="field">availableServices: array</div>
+          <div class="field">serviceRadius: number</div>
+          <div class="field">hourlyRate: number</div>
+          <div class="field">vehicleInfo: object</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Stripe Integration</h4>
+          <div class="field stripe">customerId: string</div>
+          <div class="field stripe">accountId: string</div>
+          <div class="field stripe">onboardingComplete: boolean</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Metadata</h4>
+          <div class="field metadata">createdAt: timestamp</div>
+          <div class="field metadata">totalJobsCompleted: number</div>
+          <div class="field metadata">averageRating: number</div>
+        </div>
+      </div>
+
+      <div class="collection">
+        <div class="collection-header">
+          <span class="collection-icon">🔧</span>
+          /jobs/{jobId}
+        </div>
+
+        <div class="field-group">
+          <h4>Core Fields</h4>
+          <div class="field required">jobId: string</div>
+          <div class="field required">ownerId: string</div>
+          <div class="field">providerId: string</div>
+          <div class="field required">status: enum</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Job Details</h4>
+          <div class="field">trailerType: enum</div>
+          <div class="field">problemDescription: string</div>
+          <div class="field">serviceType: string</div>
+          <div class="field">urgency: enum</div>
+          <div class="field">photos: array</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Location</h4>
+          <div class="field">pickupAddress: string</div>
+          <div class="field">pickupCoordinates: geopoint</div>
+          <div class="field">destinationAddress: string</div>
+          <div class="field">destinationCoordinates: geopoint</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Pricing</h4>
+          <div class="field">estimatedCost: number</div>
+          <div class="field">finalCost: number</div>
+          <div class="field">currency: string</div>
+          <div class="field">breakdown: object</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Stripe Integration</h4>
+          <div class="field stripe">paymentIntentId: string</div>
+          <div class="field stripe">transferId: string</div>
+          <div class="field stripe">holdReleased: boolean</div>
+        </div>
+
+        <div class="subcollection">
+          <h4>📊 Subcollections</h4>
+          <div class="field">statusUpdates/{updateId}</div>
+          <div class="field">gpsTracking/{trackingId}</div>
+        </div>
+      </div>
+
+      <div class="collection">
+        <div class="collection-header">
+          <span class="collection-icon">📍</span>
+          /jobs/{jobId}/statusUpdates/{updateId}
+        </div>
+
+        <div class="field-group">
+          <h4>Core Fields</h4>
+          <div class="field required">updateId: string</div>
+          <div class="field required">jobId: string</div>
+          <div class="field required">userId: string</div>
+          <div class="field required">userRole: enum</div>
+          <div class="field required">status: enum</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Update Details</h4>
+          <div class="field">message: string</div>
+          <div class="field">location: geopoint</div>
+          <div class="field">photos: array</div>
+          <div class="field">signature: object</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Metadata</h4>
+          <div class="field metadata">timestamp: timestamp</div>
+          <div class="field metadata">isSystemGenerated: boolean</div>
+        </div>
+      </div>
+
+      <div class="collection">
+        <div class="collection-header">
+          <span class="collection-icon">📡</span>
+          /jobs/{jobId}/gpsTracking/{trackingId}
+        </div>
+
+        <div class="field-group">
+          <h4>Core Fields</h4>
+          <div class="field required">trackingId: string</div>
+          <div class="field required">jobId: string</div>
+          <div class="field required">providerId: string</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Location Data</h4>
+          <div class="field">latitude: number</div>
+          <div class="field">longitude: number</div>
+          <div class="field">accuracy: number</div>
+          <div class="field">heading: number</div>
+          <div class="field">speed: number</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Device Info</h4>
+          <div class="field">batteryLevel: number</div>
+          <div class="field">deviceId: string</div>
+          <div class="field">isActive: boolean</div>
+        </div>
+      </div>
+
+      <div class="collection">
+        <div class="collection-header">
+          <span class="collection-icon">🔔</span>
+          /notifications/{notificationId}
+        </div>
+
+        <div class="field-group">
+          <h4>Core Fields</h4>
+          <div class="field required">notificationId: string</div>
+          <div class="field required">userId: string</div>
+          <div class="field">jobId: string</div>
+          <div class="field required">type: enum</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Content</h4>
+          <div class="field">title: string</div>
+          <div class="field">message: string</div>
+          <div class="field">data: object</div>
+          <div class="field">priority: enum</div>
+        </div>
+
+        <div class="field-group">
+          <h4>Status</h4>
+          <div class="field">status: enum</div>
+          <div class="field metadata">createdAt: timestamp</div>
+          <div class="field metadata">readAt: timestamp</div>
+        </div>
+      </div>
+
       <div class="collection">
         <div class="collection-header">
           <span class="collection-icon">⚙️</span>
@@ -470,7 +785,7 @@
         </div>
         <div class="flow-step">
           <strong>En Route</strong><br>
-          <small>Provider traveling</small>
+          <small>Provider traveling live location</small>
         </div>
         <div class="flow-step">
           <strong>In Progress</strong><br>
@@ -532,805 +847,956 @@
       </div>
     </div>
 
-    <div
-      style="margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #007bff;">
-      <h4 style="color: #007bff; margin-top: 0;">💡 Key Implementation Notes</h4>
-      <ul style="margin: 0; padding-left: 20px;">
-        <li><strong>GPS Efficiency:</strong> Batch GPS updates every 30 seconds to reduce write costs</li>
-        <li><strong>Scalability:</strong> Use subcollections for status updates and GPS to avoid document size limits
-        </li>
-        <li><strong>Security:</strong> Role-based access ensures owners and providers only see relevant data</li>
-        <li><strong>Stripe Integration:</strong> Hold funds with PaymentIntent, release with Transfer on completion</li>
-        <li><strong>Real-time:</strong> Use Firestore listeners for live job updates and notifications</li>
-        <li><strong>Indexing:</strong> Composite indexes on status + user + timestamp for efficient queries</li>
-      </ul>
+    <div class="table-schema">
+      <h3>📊 Database Schema - Tabular View</h3>
+      <div class="table-container">
+        <div class="table-wrapper">
+          <h4>👥 users</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>uid</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>User ID</td>
+              </tr>
+              <tr>
+                <td>email</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Email address</td>
+              </tr>
+              <tr>
+                <td>phoneNumber</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Phone number</td>
+              </tr>
+              <tr>
+                <td>role</td>
+                <td>enum</td>
+                <td>✓</td>
+                <td>owner | provider</td>
+              </tr>
+              <tr>
+                <td>firstName</td>
+                <td>string</td>
+                <td></td>
+                <td>First name</td>
+              </tr>
+              <tr>
+                <td>lastName</td>
+                <td>string</td>
+                <td></td>
+                <td>Last name</td>
+              </tr>
+              <tr>
+                <td>profileImageUrl</td>
+                <td>string</td>
+                <td></td>
+                <td>Profile image URL</td>
+              </tr>
+              <tr>
+                <td>address</td>
+                <td>object</td>
+                <td></td>
+                <td>Address information</td>
+              </tr>
+              <tr>
+                <td>isActive</td>
+                <td>boolean</td>
+                <td></td>
+                <td>Provider availability</td>
+              </tr>
+              <tr>
+                <td>availableServices</td>
+                <td>array</td>
+                <td></td>
+                <td>Provider services</td>
+              </tr>
+              <tr>
+                <td>serviceRadius</td>
+                <td>number</td>
+                <td></td>
+                <td>Service area radius</td>
+              </tr>
+              <tr>
+                <td>hourlyRate</td>
+                <td>number</td>
+                <td></td>
+                <td>Hourly rate</td>
+              </tr>
+              <tr>
+                <td>vehicleInfo</td>
+                <td>object</td>
+                <td></td>
+                <td>Vehicle details</td>
+              </tr>
+              <tr class="stripe-row">
+                <td>customerId</td>
+                <td>string</td>
+                <td></td>
+                <td>Stripe customer ID</td>
+              </tr>
+              <tr class="stripe-row">
+                <td>accountId</td>
+                <td>string</td>
+                <td></td>
+                <td>Stripe account ID</td>
+              </tr>
+              <tr class="stripe-row">
+                <td>onboardingComplete</td>
+                <td>boolean</td>
+                <td></td>
+                <td>Stripe onboarding status</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>createdAt</td>
+                <td>timestamp</td>
+                <td></td>
+                <td>Creation timestamp</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>totalJobsCompleted</td>
+                <td>number</td>
+                <td></td>
+                <td>Total jobs completed</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>averageRating</td>
+                <td>number</td>
+                <td></td>
+                <td>Average rating</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-wrapper">
+          <h4>🔧 jobs</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>jobId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Job ID</td>
+              </tr>
+              <tr>
+                <td>ownerId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Owner user ID</td>
+              </tr>
+              <tr>
+                <td>providerId</td>
+                <td>string</td>
+                <td></td>
+                <td>Provider user ID</td>
+              </tr>
+              <tr>
+                <td>status</td>
+                <td>enum</td>
+                <td>✓</td>
+                <td>Job status</td>
+              </tr>
+              <tr>
+                <td>trailerType</td>
+                <td>enum</td>
+                <td></td>
+                <td>Type of trailer</td>
+              </tr>
+              <tr>
+                <td>problemDescription</td>
+                <td>string</td>
+                <td></td>
+                <td>Problem description</td>
+              </tr>
+              <tr>
+                <td>serviceType</td>
+                <td>string</td>
+                <td></td>
+                <td>Service type</td>
+              </tr>
+              <tr>
+                <td>urgency</td>
+                <td>enum</td>
+                <td></td>
+                <td>Urgency level</td>
+              </tr>
+              <tr>
+                <td>photos</td>
+                <td>array</td>
+                <td></td>
+                <td>Photo URLs</td>
+              </tr>
+              <tr>
+                <td>pickupAddress</td>
+                <td>string</td>
+                <td></td>
+                <td>Pickup address</td>
+              </tr>
+              <tr>
+                <td>pickupCoordinates</td>
+                <td>geopoint</td>
+                <td></td>
+                <td>Pickup coordinates</td>
+              </tr>
+              <tr>
+                <td>destinationAddress</td>
+                <td>string</td>
+                <td></td>
+                <td>Destination address</td>
+              </tr>
+              <tr>
+                <td>destinationCoordinates</td>
+                <td>geopoint</td>
+                <td></td>
+                <td>Destination coordinates</td>
+              </tr>
+              <tr>
+                <td>estimatedCost</td>
+                <td>number</td>
+                <td></td>
+                <td>Estimated cost</td>
+              </tr>
+              <tr>
+                <td>finalCost</td>
+                <td>number</td>
+                <td></td>
+                <td>Final cost</td>
+              </tr>
+              <tr>
+                <td>currency</td>
+                <td>string</td>
+                <td></td>
+                <td>Currency code</td>
+              </tr>
+              <tr>
+                <td>breakdown</td>
+                <td>object</td>
+                <td></td>
+                <td>Cost breakdown</td>
+              </tr>
+              <tr class="stripe-row">
+                <td>paymentIntentId</td>
+                <td>string</td>
+                <td></td>
+                <td>Stripe payment intent ID</td>
+              </tr>
+              <tr class="stripe-row">
+                <td>transferId</td>
+                <td>string</td>
+                <td></td>
+                <td>Stripe transfer ID</td>
+              </tr>
+              <tr class="stripe-row">
+                <td>holdReleased</td>
+                <td>boolean</td>
+                <td></td>
+                <td>Payment hold status</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-wrapper">
+          <h4>📊 jobs/{jobId}/statusUpdates</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>updateId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Update ID</td>
+              </tr>
+              <tr>
+                <td>jobId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Parent job ID</td>
+              </tr>
+              <tr>
+                <td>userId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>User who made update</td>
+              </tr>
+              <tr>
+                <td>userRole</td>
+                <td>enum</td>
+                <td>✓</td>
+                <td>User role</td>
+              </tr>
+              <tr>
+                <td>status</td>
+                <td>enum</td>
+                <td>✓</td>
+                <td>New status</td>
+              </tr>
+              <tr>
+                <td>message</td>
+                <td>string</td>
+                <td></td>
+                <td>Update message</td>
+              </tr>
+              <tr>
+                <td>location</td>
+                <td>geopoint</td>
+                <td></td>
+                <td>Location coordinates</td>
+              </tr>
+              <tr>
+                <td>photos</td>
+                <td>array</td>
+                <td></td>
+                <td>Photo URLs</td>
+              </tr>
+              <tr>
+                <td>signature</td>
+                <td>object</td>
+                <td></td>
+                <td>Digital signature</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>timestamp</td>
+                <td>timestamp</td>
+                <td></td>
+                <td>Update timestamp</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>isSystemGenerated</td>
+                <td>boolean</td>
+                <td></td>
+                <td>System generated flag</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-wrapper">
+          <h4>📡 jobs/{jobId}/gpsTracking</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>trackingId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Tracking ID</td>
+              </tr>
+              <tr>
+                <td>jobId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Parent job ID</td>
+              </tr>
+              <tr>
+                <td>providerId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Provider user ID</td>
+              </tr>
+              <tr>
+                <td>latitude</td>
+                <td>number</td>
+                <td></td>
+                <td>Latitude coordinate</td>
+              </tr>
+              <tr>
+                <td>longitude</td>
+                <td>number</td>
+                <td></td>
+                <td>Longitude coordinate</td>
+              </tr>
+              <tr>
+                <td>accuracy</td>
+                <td>number</td>
+                <td></td>
+                <td>GPS accuracy</td>
+              </tr>
+              <tr>
+                <td>heading</td>
+                <td>number</td>
+                <td></td>
+                <td>Direction heading</td>
+              </tr>
+              <tr>
+                <td>speed</td>
+                <td>number</td>
+                <td></td>
+                <td>Speed</td>
+              </tr>
+              <tr>
+                <td>batteryLevel</td>
+                <td>number</td>
+                <td></td>
+                <td>Device battery level</td>
+              </tr>
+              <tr>
+                <td>deviceId</td>
+                <td>string</td>
+                <td></td>
+                <td>Device identifier</td>
+              </tr>
+              <tr>
+                <td>isActive</td>
+                <td>boolean</td>
+                <td></td>
+                <td>Tracking active status</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-wrapper">
+          <h4>🔔 notifications</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>notificationId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Notification ID</td>
+              </tr>
+              <tr>
+                <td>userId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Target user ID</td>
+              </tr>
+              <tr>
+                <td>jobId</td>
+                <td>string</td>
+                <td></td>
+                <td>Related job ID</td>
+              </tr>
+              <tr>
+                <td>type</td>
+                <td>enum</td>
+                <td>✓</td>
+                <td>Notification type</td>
+              </tr>
+              <tr>
+                <td>title</td>
+                <td>string</td>
+                <td></td>
+                <td>Notification title</td>
+              </tr>
+              <tr>
+                <td>message</td>
+                <td>string</td>
+                <td></td>
+                <td>Notification message</td>
+              </tr>
+              <tr>
+                <td>data</td>
+                <td>object</td>
+                <td></td>
+                <td>Additional data</td>
+              </tr>
+              <tr>
+                <td>priority</td>
+                <td>enum</td>
+                <td></td>
+                <td>Priority level</td>
+              </tr>
+              <tr>
+                <td>status</td>
+                <td>enum</td>
+                <td></td>
+                <td>Read status</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>createdAt</td>
+                <td>timestamp</td>
+                <td></td>
+                <td>Creation timestamp</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>readAt</td>
+                <td>timestamp</td>
+                <td></td>
+                <td>Read timestamp</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-wrapper">
+          <h4>⚙️ adminLogs</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>logId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Log ID</td>
+              </tr>
+              <tr>
+                <td>action</td>
+                <td>enum</td>
+                <td>✓</td>
+                <td>Admin action</td>
+              </tr>
+              <tr>
+                <td>adminId</td>
+                <td>string</td>
+                <td>✓</td>
+                <td>Admin user ID</td>
+              </tr>
+              <tr>
+                <td>targetId</td>
+                <td>string</td>
+                <td></td>
+                <td>Target entity ID</td>
+              </tr>
+              <tr>
+                <td>reason</td>
+                <td>string</td>
+                <td></td>
+                <td>Action reason</td>
+              </tr>
+              <tr>
+                <td>amount</td>
+                <td>number</td>
+                <td></td>
+                <td>Amount (if applicable)</td>
+              </tr>
+              <tr>
+                <td>originalStatus</td>
+                <td>string</td>
+                <td></td>
+                <td>Original status</td>
+              </tr>
+              <tr>
+                <td>newStatus</td>
+                <td>string</td>
+                <td></td>
+                <td>New status</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>timestamp</td>
+                <td>timestamp</td>
+                <td></td>
+                <td>Action timestamp</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>ipAddress</td>
+                <td>string</td>
+                <td></td>
+                <td>IP address</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>userAgent</td>
+                <td>string</td>
+                <td></td>
+                <td>User agent</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Existing E-commerce Database Schema - Tabular View Section -->
+    <div class="table-schema">
+      <h3>📊 E-commerce Database Schema - Tabular View</h3>
+      <div class="table-container">
+        <!-- orders table -->
+        <div class="table-wrapper">
+          <h4>📦 orders</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>id</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Order ID</td>
+              </tr>
+              <tr>
+                <td>user_id</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>User who placed the order</td>
+              </tr>
+              <tr>
+                <td>status</td>
+                <td>varchar</td>
+                <td></td>
+                <td>Order status (e.g., pending, shipped)</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>created_at</td>
+                <td>varchar</td>
+                <td></td>
+                <td>Timestamp of order creation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- order_items table -->
+        <div class="table-wrapper">
+          <h4>🛒 order_items</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>order_id</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Order ID</td>
+              </tr>
+              <tr>
+                <td>product_id</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Product ID</td>
+              </tr>
+              <tr>
+                <td>quantity</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Quantity of the product</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- products table -->
+        <div class="table-wrapper">
+          <h4>🏷️ products</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>id</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Product ID</td>
+              </tr>
+              <tr>
+                <td>merchant_id</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Merchant who offers the product</td>
+              </tr>
+              <tr>
+                <td>name</td>
+                <td>varchar</td>
+                <td>✓</td>
+                <td>Product name</td>
+              </tr>
+              <tr>
+                <td>price</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Product price</td>
+              </tr>
+              <tr>
+                <td>status</td>
+                <td>varchar</td>
+                <td></td>
+                <td>Product status (e.g., available, out of stock)</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>created_at</td>
+                <td>varchar</td>
+                <td></td>
+                <td>Timestamp of product creation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- merchants table -->
+        <div class="table-wrapper">
+          <h4>🏪 merchants</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>id</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Merchant ID</td>
+              </tr>
+              <tr>
+                <td>merchant_name</td>
+                <td>varchar</td>
+                <td>✓</td>
+                <td>Merchant name</td>
+              </tr>
+              <tr>
+                <td>admin_id</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Admin user ID</td>
+              </tr>
+              <tr>
+                <td>country_code</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Country code</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>created_at</td>
+                <td>varchar</td>
+                <td></td>
+                <td>Timestamp of merchant creation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- users table -->
+        <div class="table-wrapper">
+          <h4>👤 users</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>id</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>User ID</td>
+              </tr>
+              <tr>
+                <td>full_name</td>
+                <td>varchar</td>
+                <td>✓</td>
+                <td>Full name</td>
+              </tr>
+              <tr>
+                <td>email</td>
+                <td>varchar</td>
+                <td>✓</td>
+                <td>Email address</td>
+              </tr>
+              <tr>
+                <td>gender</td>
+                <td>varchar</td>
+                <td></td>
+                <td>Gender</td>
+              </tr>
+              <tr>
+                <td>date_of_birth</td>
+                <td>varchar</td>
+                <td></td>
+                <td>Date of birth</td>
+              </tr>
+              <tr>
+                <td>country_code</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Country code</td>
+              </tr>
+              <tr class="metadata-row">
+                <td>created_at</td>
+                <td>varchar</td>
+                <td></td>
+                <td>Timestamp of user creation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- countries table -->
+        <div class="table-wrapper">
+          <h4>🌍 countries</h4>
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Data Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>code</td>
+                <td>int</td>
+                <td>✓</td>
+                <td>Country code</td>
+              </tr>
+              <tr>
+                <td>name</td>
+                <td>varchar</td>
+                <td>✓</td>
+                <td>Country name</td>
+              </tr>
+              <tr>
+                <td>continent_name</td>
+                <td>varchar</td>
+                <td>✓</td>
+                <td>Continent name</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- New E-commerce Database Schema - Visual View Section -->
+    <div class="visual-schema">
+      <h3>📊 E-commerce Database Schema - Visual View</h3>
+      <div class="schema-grid">
+        <!-- orders table -->
+        <div class="table-box">
+          <h4>📦 orders</h4>
+          <ul class="field-list">
+            <li class="primary-key">id: int</li>
+            <li>user_id: int</li>
+            <li>status: varchar</li>
+            <li>created_at: varchar</li>
+          </ul>
+        </div>
+        <!-- order_items table -->
+        <div class="table-box">
+          <h4>🛒 order_items</h4>
+          <ul class="field-list">
+            <li>order_id: int</li>
+            <li>product_id: int</li>
+            <li>quantity: int</li>
+          </ul>
+        </div>
+        <!-- products table -->
+        <div class="table-box">
+          <h4>🏷️ products</h4>
+          <ul class="field-list">
+            <li class="primary-key">id: int</li>
+            <li>merchant_id: int</li>
+            <li>name: varchar</li>
+            <li>price: int</li>
+            <li>status: varchar</li>
+            <li>created_at: varchar</li>
+          </ul>
+        </div>
+        <!-- merchants table -->
+        <div class="table-box">
+          <h4>🏪 merchants</h4>
+          <ul class="field-list">
+            <li class="primary-key">id: int</li>
+            <li>merchant_name: varchar</li>
+            <li>admin_id: int</li>
+            <li>country_code: int</li>
+            <li>created_at: varchar</li>
+          </ul>
+        </div>
+        <!-- users table -->
+        <div class="table-box">
+          <h4>👤 users</h4>
+          <ul class="field-list">
+            <li class="primary-key">id: int</li>
+            <li>full_name: varchar</li>
+            <li>email: varchar</li>
+            <li>gender: varchar</li>
+            <li>date_of_birth: varchar</li>
+            <li>country_code: int</li>
+            <li>created_at: varchar</li>
+          </ul>
+        </div>
+        <!-- countries table -->
+        <div class="table-box">
+          <h4>🌍 countries</h4>
+          <ul class="field-list">
+            <li class="primary-key">code: int</li>
+            <li>name: varchar</li>
+            <li>continent_name: varchar</li>
+          </ul>
+        </div>
+
+        <!-- Connecting lines -->
+        <!-- <div class="connection-line line-orders-users"></div>
+        <div class="connection-line line-order_items-orders"></div>
+        <div class="connection-line line-order_items-products"></div>
+        <div class="connection-line line-products-merchants"></div>
+        <div class="connection-line line-merchants-users"></div>
+        <div class="connection-line line-merchants-countries"></div>
+        <div class="connection-line line-users-countries"></div> -->
+      </div>
     </div>
   </div>
 </body>
 
-</html>="collection-icon">👥</span>
-/users/{userId}
-</div>
-
-<div class="field-group">
-  <h4>Core Fields</h4>
-  <div class="field required">uid: string</div>
-  <div class="field required">email: string</div>
-  <div class="field required">phoneNumber: string</div>
-  <div class="field required">role: "owner" | "provider"</div>
-</div>
-
-<div class="field-group">
-  <h4>Profile</h4>
-  <div class="field">firstName: string</div>
-  <div class="field">lastName: string</div>
-  <div class="field">profileImageUrl: string</div>
-  <div class="field">address: object</div>
-</div>
-
-<div class="field-group">
-  <h4>Provider Settings</h4>
-  <div class="field">isActive: boolean</div>
-  <div class="field">availableServices: array</div>
-  <div class="field">serviceRadius: number</div>
-  <div class="field">hourlyRate: number</div>
-  <div class="field">vehicleInfo: object</div>
-</div>
-
-<div class="field-group">
-  <h4>Stripe Integration</h4>
-  <div class="field stripe">customerId: string</div>
-  <div class="field stripe">accountId: string</div>
-  <div class="field stripe">onboardingComplete: boolean</div>
-</div>
-
-<div class="field-group">
-  <h4>Metadata</h4>
-  <div class="field metadata">createdAt: timestamp</div>
-  <div class="field metadata">totalJobsCompleted: number</div>
-  <div class="field metadata">averageRating: number</div>
-</div>
-</div>
-
-<div class="collection">
-  <div class="collection-header">
-    <span class="collection-icon">🔧</span>
-    /jobs/{jobId}
-  </div>
-
-  <div class="field-group">
-    <h4>Core Fields</h4>
-    <div class="field required">jobId: string</div>
-    <div class="field required">ownerId: string</div>
-    <div class="field">providerId: string</div>
-    <div class="field required">status: enum</div>
-  </div>
-
-  <div class="field-group">
-    <h4>Job Details</h4>
-    <div class="field">trailerType: enum</div>
-    <div class="field">problemDescription: string</div>
-    <div class="field">serviceType: string</div>
-    <div class="field">urgency: enum</div>
-    <div class="field">photos: array</div>
-  </div>
-
-  <div class="field-group">
-    <h4>Location</h4>
-    <div class="field">pickupAddress: string</div>
-    <div class="field">pickupCoordinates: geopoint</div>
-    <div class="field">destinationAddress: string</div>
-    <div class="field">destinationCoordinates: geopoint</div>
-  </div>
-
-  <div class="field-group">
-    <h4>Pricing</h4>
-    <div class="field">estimatedCost: number</div>
-    <div class="field">finalCost: number</div>
-    <div class="field">currency: string</div>
-    <div class="field">breakdown: object</div>
-  </div>
-
-  <div class="field-group">
-    <h4>Stripe Integration</h4>
-    <div class="field stripe">paymentIntentId: string</div>
-    <div class="field stripe">transferId: string</div>
-    <div class="field stripe">holdReleased: boolean</div>
-  </div>
-
-  <div class="subcollection">
-    <h4>📊 Subcollections</h4>
-    <div class="field">statusUpdates/{updateId}</div>
-    <div class="field">gpsTracking/{trackingId}</div>
-  </div>
-</div>
-
-<div class="collection">
-  <div class="collection-header">
-    <span class="collection-icon">📍</span>
-    /jobs/{jobId}/statusUpdates/{updateId}
-  </div>
-
-  <div class="field-group">
-    <h4>Core Fields</h4>
-    <div class="field required">updateId: string</div>
-    <div class="field required">jobId: string</div>
-    <div class="field required">userId: string</div>
-    <div class="field required">userRole: enum</div>
-    <div class="field required">status: enum</div>
-  </div>
-
-  <div class="field-group">
-    <h4>Update Details</h4>
-    <div class="field">message: string</div>
-    <div class="field">location: geopoint</div>
-    <div class="field">photos: array</div>
-    <div class="field">signature: object</div>
-  </div>
-
-  <div class="field-group">
-    <h4>Metadata</h4>
-    <div class="field metadata">timestamp: timestamp</div>
-    <div class="field metadata">isSystemGenerated: boolean</div>
-  </div>
-</div>
-
-<div class="collection">
-  <div class="collection-header">
-    <span class="collection-icon">📡</span>
-    /jobs/{jobId}/gpsTracking/{trackingId}
-  </div>
-
-  <div class="field-group">
-    <h4>Core Fields</h4>
-    <div class="field required">trackingId: string</div>
-    <div class="field required">jobId: string</div>
-    <div class="field required">providerId: string</div>
-  </div>
-
-  <div class="field-group">
-    <h4>Location Data</h4>
-    <div class="field">latitude: number</div>
-    <div class="field">longitude: number</div>
-    <div class="field">accuracy: number</div>
-    <div class="field">heading: number</div>
-    <div class="field">speed: number</div>
-  </div>
-
-  <div class="field-group">
-    <h4>Device Info</h4>
-    <div class="field">batteryLevel: number</div>
-    <div class="field">deviceId: string</div>
-    <div class="field">isActive: boolean</div>
-  </div>
-</div>
-
-<div class="collection">
-  <div class="collection-header">
-    <span class="collection-icon">🔔</span>
-    /notifications/{notificationId}
-  </div>
-
-  <div class="field-group">
-    <h4>Core Fields</h4>
-    <div class="field required">notificationId: string</div>
-    <div class="field required">userId: string</div>
-    <div class="field">jobId: string</div>
-    <div class="field required">type: enum</div>
-  </div>
-
-  <div class="field-group">
-    <h4>Content</h4>
-    <div class="field">title: string</div>
-    <div class="field">message: string</div>
-    <div class="field">data: object</div>
-    <div class="field">priority: enum</div>
-  </div>
-
-  <div class="field-group">
-    <h4>Status</h4>
-    <div class="field">status: enum</div>
-    <div class="field metadata">createdAt: timestamp</div>
-    <div class="field metadata">readAt: timestamp</div>
-  </div>
-</div>
-
-<div class="table-schema">
-  <h3>📊 Database Schema - Tabular View</h3>
-
-  <div class="table-container">
-    <div class="table-wrapper">
-      <h4>👥 users</h4>
-      <table class="schema-table">
-        <thead>
-          <tr>
-            <th>Field Name</th>
-            <th>Data Type</th>
-            <th>Required</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>uid</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>User ID</td>
-          </tr>
-          <tr>
-            <td>email</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Email address</td>
-          </tr>
-          <tr>
-            <td>phoneNumber</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Phone number</td>
-          </tr>
-          <tr>
-            <td>role</td>
-            <td>enum</td>
-            <td>✓</td>
-            <td>owner | provider</td>
-          </tr>
-          <tr>
-            <td>firstName</td>
-            <td>string</td>
-            <td></td>
-            <td>First name</td>
-          </tr>
-          <tr>
-            <td>lastName</td>
-            <td>string</td>
-            <td></td>
-            <td>Last name</td>
-          </tr>
-          <tr>
-            <td>profileImageUrl</td>
-            <td>string</td>
-            <td></td>
-            <td>Profile image URL</td>
-          </tr>
-          <tr>
-            <td>address</td>
-            <td>object</td>
-            <td></td>
-            <td>Address information</td>
-          </tr>
-          <tr>
-            <td>isActive</td>
-            <td>boolean</td>
-            <td></td>
-            <td>Provider availability</td>
-          </tr>
-          <tr>
-            <td>availableServices</td>
-            <td>array</td>
-            <td></td>
-            <td>Provider services</td>
-          </tr>
-          <tr>
-            <td>serviceRadius</td>
-            <td>number</td>
-            <td></td>
-            <td>Service area radius</td>
-          </tr>
-          <tr>
-            <td>hourlyRate</td>
-            <td>number</td>
-            <td></td>
-            <td>Hourly rate</td>
-          </tr>
-          <tr>
-            <td>vehicleInfo</td>
-            <td>object</td>
-            <td></td>
-            <td>Vehicle details</td>
-          </tr>
-          <tr class="stripe-row">
-            <td>customerId</td>
-            <td>string</td>
-            <td></td>
-            <td>Stripe customer ID</td>
-          </tr>
-          <tr class="stripe-row">
-            <td>accountId</td>
-            <td>string</td>
-            <td></td>
-            <td>Stripe account ID</td>
-          </tr>
-          <tr class="stripe-row">
-            <td>onboardingComplete</td>
-            <td>boolean</td>
-            <td></td>
-            <td>Stripe onboarding status</td>
-          </tr>
-          <tr class="metadata-row">
-            <td>createdAt</td>
-            <td>timestamp</td>
-            <td></td>
-            <td>Creation timestamp</td>
-          </tr>
-          <tr class="metadata-row">
-            <td>totalJobsCompleted</td>
-            <td>number</td>
-            <td></td>
-            <td>Total jobs completed</td>
-          </tr>
-          <tr class="metadata-row">
-            <td>averageRating</td>
-            <td>number</td>
-            <td></td>
-            <td>Average rating</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="table-wrapper">
-      <h4>🔧 jobs</h4>
-      <table class="schema-table">
-        <thead>
-          <tr>
-            <th>Field Name</th>
-            <th>Data Type</th>
-            <th>Required</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>jobId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Job ID</td>
-          </tr>
-          <tr>
-            <td>ownerId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Owner user ID</td>
-          </tr>
-          <tr>
-            <td>providerId</td>
-            <td>string</td>
-            <td></td>
-            <td>Provider user ID</td>
-          </tr>
-          <tr>
-            <td>status</td>
-            <td>enum</td>
-            <td>✓</td>
-            <td>Job status</td>
-          </tr>
-          <tr>
-            <td>trailerType</td>
-            <td>enum</td>
-            <td></td>
-            <td>Type of trailer</td>
-          </tr>
-          <tr>
-            <td>problemDescription</td>
-            <td>string</td>
-            <td></td>
-            <td>Problem description</td>
-          </tr>
-          <tr>
-            <td>serviceType</td>
-            <td>string</td>
-            <td></td>
-            <td>Service type</td>
-          </tr>
-          <tr>
-            <td>urgency</td>
-            <td>enum</td>
-            <td></td>
-            <td>Urgency level</td>
-          </tr>
-          <tr>
-            <td>photos</td>
-            <td>array</td>
-            <td></td>
-            <td>Photo URLs</td>
-          </tr>
-          <tr>
-            <td>pickupAddress</td>
-            <td>string</td>
-            <td></td>
-            <td>Pickup address</td>
-          </tr>
-          <tr>
-            <td>pickupCoordinates</td>
-            <td>geopoint</td>
-            <td></td>
-            <td>Pickup coordinates</td>
-          </tr>
-          <tr>
-            <td>destinationAddress</td>
-            <td>string</td>
-            <td></td>
-            <td>Destination address</td>
-          </tr>
-          <tr>
-            <td>destinationCoordinates</td>
-            <td>geopoint</td>
-            <td></td>
-            <td>Destination coordinates</td>
-          </tr>
-          <tr>
-            <td>estimatedCost</td>
-            <td>number</td>
-            <td></td>
-            <td>Estimated cost</td>
-          </tr>
-          <tr>
-            <td>finalCost</td>
-            <td>number</td>
-            <td></td>
-            <td>Final cost</td>
-          </tr>
-          <tr>
-            <td>currency</td>
-            <td>string</td>
-            <td></td>
-            <td>Currency code</td>
-          </tr>
-          <tr>
-            <td>breakdown</td>
-            <td>object</td>
-            <td></td>
-            <td>Cost breakdown</td>
-          </tr>
-          <tr class="stripe-row">
-            <td>paymentIntentId</td>
-            <td>string</td>
-            <td></td>
-            <td>Stripe payment intent ID</td>
-          </tr>
-          <tr class="stripe-row">
-            <td>transferId</td>
-            <td>string</td>
-            <td></td>
-            <td>Stripe transfer ID</td>
-          </tr>
-          <tr class="stripe-row">
-            <td>holdReleased</td>
-            <td>boolean</td>
-            <td></td>
-            <td>Payment hold status</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="table-wrapper">
-      <h4>📊 jobs/{jobId}/statusUpdates</h4>
-      <table class="schema-table">
-        <thead>
-          <tr>
-            <th>Field Name</th>
-            <th>Data Type</th>
-            <th>Required</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>updateId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Update ID</td>
-          </tr>
-          <tr>
-            <td>jobId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Parent job ID</td>
-          </tr>
-          <tr>
-            <td>userId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>User who made update</td>
-          </tr>
-          <tr>
-            <td>userRole</td>
-            <td>enum</td>
-            <td>✓</td>
-            <td>User role</td>
-          </tr>
-          <tr>
-            <td>status</td>
-            <td>enum</td>
-            <td>✓</td>
-            <td>New status</td>
-          </tr>
-          <tr>
-            <td>message</td>
-            <td>string</td>
-            <td></td>
-            <td>Update message</td>
-          </tr>
-          <tr>
-            <td>location</td>
-            <td>geopoint</td>
-            <td></td>
-            <td>Location coordinates</td>
-          </tr>
-          <tr>
-            <td>photos</td>
-            <td>array</td>
-            <td></td>
-            <td>Photo URLs</td>
-          </tr>
-          <tr>
-            <td>signature</td>
-            <td>object</td>
-            <td></td>
-            <td>Digital signature</td>
-          </tr>
-          <tr class="metadata-row">
-            <td>timestamp</td>
-            <td>timestamp</td>
-            <td></td>
-            <td>Update timestamp</td>
-          </tr>
-          <tr class="metadata-row">
-            <td>isSystemGenerated</td>
-            <td>boolean</td>
-            <td></td>
-            <td>System generated flag</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="table-wrapper">
-      <h4>📡 jobs/{jobId}/gpsTracking</h4>
-      <table class="schema-table">
-        <thead>
-          <tr>
-            <th>Field Name</th>
-            <th>Data Type</th>
-            <th>Required</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>trackingId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Tracking ID</td>
-          </tr>
-          <tr>
-            <td>jobId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Parent job ID</td>
-          </tr>
-          <tr>
-            <td>providerId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Provider user ID</td>
-          </tr>
-          <tr>
-            <td>latitude</td>
-            <td>number</td>
-            <td></td>
-            <td>Latitude coordinate</td>
-          </tr>
-          <tr>
-            <td>longitude</td>
-            <td>number</td>
-            <td></td>
-            <td>Longitude coordinate</td>
-          </tr>
-          <tr>
-            <td>accuracy</td>
-            <td>number</td>
-            <td></td>
-            <td>GPS accuracy</td>
-          </tr>
-          <tr>
-            <td>heading</td>
-            <td>number</td>
-            <td></td>
-            <td>Direction heading</td>
-          </tr>
-          <tr>
-            <td>speed</td>
-            <td>number</td>
-            <td></td>
-            <td>Speed</td>
-          </tr>
-          <tr>
-            <td>batteryLevel</td>
-            <td>number</td>
-            <td></td>
-            <td>Device battery level</td>
-          </tr>
-          <tr>
-            <td>deviceId</td>
-            <td>string</td>
-            <td></td>
-            <td>Device identifier</td>
-          </tr>
-          <tr>
-            <td>isActive</td>
-            <td>boolean</td>
-            <td></td>
-            <td>Tracking active status</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="table-wrapper">
-      <h4>🔔 notifications</h4>
-      <table class="schema-table">
-        <thead>
-          <tr>
-            <th>Field Name</th>
-            <th>Data Type</th>
-            <th>Required</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>notificationId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Notification ID</td>
-          </tr>
-          <tr>
-            <td>userId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Target user ID</td>
-          </tr>
-          <tr>
-            <td>jobId</td>
-            <td>string</td>
-            <td></td>
-            <td>Related job ID</td>
-          </tr>
-          <tr>
-            <td>type</td>
-            <td>enum</td>
-            <td>✓</td>
-            <td>Notification type</td>
-          </tr>
-          <tr>
-            <td>title</td>
-            <td>string</td>
-            <td></td>
-            <td>Notification title</td>
-          </tr>
-          <tr>
-            <td>message</td>
-            <td>string</td>
-            <td></td>
-            <td>Notification message</td>
-          </tr>
-          <tr>
-            <td>data</td>
-            <td>object</td>
-            <td></td>
-            <td>Additional data</td>
-          </tr>
-          <tr>
-            <td>priority</td>
-            <td>enum</td>
-            <td></td>
-            <td>Priority level</td>
-          </tr>
-          <tr>
-            <td>status</td>
-            <td>enum</td>
-            <td></td>
-            <td>Read status</td>
-          </tr>
-          <tr class="metadata-row">
-            <td>createdAt</td>
-            <td>timestamp</td>
-            <td></td>
-            <td>Creation timestamp</td>
-          </tr>
-          <tr class="metadata-row">
-            <td>readAt</td>
-            <td>timestamp</td>
-            <td></td>
-            <td>Read timestamp</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="table-wrapper">
-      <h4>⚙️ adminLogs</h4>
-      <table class="schema-table">
-        <thead>
-          <tr>
-            <th>Field Name</th>
-            <th>Data Type</th>
-            <th>Required</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>logId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Log ID</td>
-          </tr>
-          <tr>
-            <td>action</td>
-            <td>enum</td>
-            <td>✓</td>
-            <td>Admin action</td>
-          </tr>
-          <tr>
-            <td>adminId</td>
-            <td>string</td>
-            <td>✓</td>
-            <td>Admin user ID</td>
-          </tr>
-          <tr>
-            <td>targetId</td>
-            <td>string</td>
-            <td></td>
-            <td>Target entity ID</td>
-          </tr>
-          <tr>
-            <td>reason</td>
-            <td>string</td>
-            <td></td>
-            <td>Action reason</td>
-          </tr>
-          <tr>
-            <td>amount</td>
-            <td>number</td>
-            <td></td>
-            <td>Amount (if applicable)</td>
-          </tr>
-          <tr>
-            <td>originalStatus</td>
-            <td>string</td>
-            <td></td>
-            <td>Original status</td>
-          </tr>
-          <tr>
-            <td>newStatus</td>
-            <td>string</td>
-            <td></td>
-            <td>New status</td>
-          </tr>
-          <tr class="metadata-row">
-            <td>timestamp</td>
-            <td>timestamp</td>
-            <td></td>
-            <td>Action timestamp</td>
-          </tr>
-          <tr class="metadata-row">
-            <td>ipAddress</td>
-            <td>string</td>
-            <td></td>
-            <td>IP address</td>
-          </tr>
-          <tr class="metadata-row">
-            <td>userAgent</td>
-            <td>string</td>
-            <td></td>
-            <td>User agent</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+</html>
